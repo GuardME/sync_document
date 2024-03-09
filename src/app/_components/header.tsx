@@ -5,6 +5,7 @@ import {
   LoginLink,
 } from "@kinde-oss/kinde-auth-nextjs/components";
 
+
 function Header() {
   return (
     <header className="bg-[#16161a]">
