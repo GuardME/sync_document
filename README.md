@@ -42,3 +42,5 @@ Hyperdev.ui
 shacdn
 kinde auth
 convex
+## the resource
+https://vsgithub.com/rrs301/erasor_clone/blob/main/package.json
