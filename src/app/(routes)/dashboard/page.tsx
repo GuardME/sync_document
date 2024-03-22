@@ -42,9 +42,7 @@ function Dashboard() {
     <>
       <div>
         page dashboard
-        <Button>
-          <LogoutLink>Logout</LogoutLink>
-        </Button>
+
       </div>
     </>
   );
