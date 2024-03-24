@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Link, Save } from "lucide-react";
 
-function WorkspaceHeader() {
+function WorkspaceHeader({onSave}:any) {
   return (
     <div className="p-3 border-b flex justify-between items-center">
       <div className="flex gap-2 items-center">
@@ -14,6 +14,7 @@ function WorkspaceHeader() {
         <Button
           className="h-8 text-[12px]
         gap-2 bg-yellow-500 hover:bg-yellow-600"
+        onClick={()=>onSave()}
         >
           <Save className="h-4 w-4" /> Save{" "}
         </Button>

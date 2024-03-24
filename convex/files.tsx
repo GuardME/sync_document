@@ -16,16 +16,28 @@ export const createFile = mutation({
   },
 });
 
-export const getFiles=query({
-  args:{
-    teamId:v.string()
+export const getFiles = query({
+  args: {
+    teamId: v.string(),
   },
-  handler: async(ctx,args)=>{
-    const result=ctx.db.query('files')
-    .filter(q=>q.eq(q.field('teamId'),args.teamId))
-    .order('desc')
-    .collect();
+  handler: async (ctx, args) => {
+    const result = ctx.db
+      .query("files")
+      .filter((q) => q.eq(q.field("teamId"), args.teamId))
+      .order("desc")
+      .collect();
 
-    return result
-  }
-})
+    return result;
+  },
+});
+
+export const updateDocument = mutation({
+  args: {
+    _id: v.id("files"),
+    document: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const result = await ctx.db.patch(args._id, { document: args.document });
+    return result;
+  },
+});

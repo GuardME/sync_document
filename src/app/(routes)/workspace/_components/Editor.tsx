@@ -1,23 +1,65 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import EditorJS from "@editorjs/editorjs";
 // // @ts-ignore
 import Header from "@editorjs/header";
 // // @ts-ignore
-// import List from "@editorjs/list";
+import List from "@editorjs/list";
 // // @ts-ignore
 import Checklist from "@editorjs/checklist";
 // // @ts-ignore
-// import Paragraph from '@editorjs/paragraph';
+import Paragraph from "@editorjs/paragraph";
 // // @ts-ignore
-// import Warning from '@editorjs/warning';
+import Warning from "@editorjs/warning";
 // // @ts-ignore
 import Table from "@editorjs/table";
 
-function Editor() {
+import { api } from "../../../../../convex/_generated/api";
+import { FILE } from "../../dashboard/_components/FileList";
+import { useMutation } from "convex/react";
+import { toast } from "sonner";
+
+const rawDocument = {
+  time: 1550476186479,
+  blocks: [
+    {
+      data: {
+        text: "Document Name",
+        level: 2,
+      },
+      id: "123",
+      type: "header",
+    },
+    {
+      data: {
+        level: 4,
+      },
+      id: "1234",
+      type: "header",
+    },
+  ],
+  version: "2.8.1",
+};
+
+function Editor({
+  onSaveTrigger,
+  fileData,
+  fileId,
+}: {
+  onSaveTrigger: any;
+  fileId: any;
+  fileData: FILE;
+}) {
+  const ref = useRef<EditorJS>();
+  const updateDocument = useMutation(api.files.updateDocument);
+  const [document, setDocument] = useState(rawDocument);
   useEffect(() => {
     initEditor();
-  });
+  },[]);
+  useEffect(() => {
+    console.log("triiger Value:", onSaveTrigger);
+    onSaveTrigger && onSaveDocument();
+  }, [onSaveTrigger]);
   const initEditor = () => {
     const editor = new EditorJS({
       // for detect id element
@@ -29,36 +71,62 @@ function Editor() {
             placeholder: "Enter a Header",
           },
         },
-      
-        //   list: {
-        //     class: List,
-        //     inlineToolbar: true,
-        //     config: {
-        //       defaultStyle: 'unordered'
-        //     }
-        //   },
+
+        list: {
+          class: List,
+          inlineToolbar: true,
+          config: {
+            defaultStyle: "unordered",
+          },
+        },
         checklist: {
           class: Checklist,
           inlineToolbar: true,
         },
         table: {
-            class: Table,
-            inlineToolbar: true,
-            config: {
-              rows: 2,
-              cols: 3,
-            },
+          class: Table,
+          inlineToolbar: true,
+          config: {
+            rows: 2,
+            cols: 3,
           },
-        //   paragraph: Paragraph,
-        //   warning: Warning,
+        },
+        paragraph: Paragraph,
+        warning: Warning,
       },
       holder: "editorjs",
+      data: fileData?.document ? JSON.parse(fileData.document) : rawDocument,
     });
+    ref.current = editor;
+  };
+
+  const onSaveDocument = () => {
+    if (ref.current) {
+      ref.current
+        .save()
+        .then((outputData) => {
+          console.log("Article data: ", outputData);
+          updateDocument({
+            _id: fileId,
+            document: JSON.stringify(outputData),
+          }).then(
+            (resp) => {
+              toast("Document Updated!");
+            },
+            (e) => {
+              toast("Server Error!");
+            }
+          );
+        })
+        .catch((error) => {
+          console.log("Saving failed: ", error);
+        });
+    }
   };
 
   return (
     <div>
-      <div id="editorjs" className="ml-6 "></div>
+      <div id="editorjs" className="ml-20"></div>
     </div>
   );
 }
