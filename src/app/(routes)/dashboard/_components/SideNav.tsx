@@ -19,8 +19,8 @@ function SideNav() {
   }, [activeTeam]);
   const onFileCreate = (fileName: string) => {
     createFile({
-      fileName: fileName,
-      teamId: activeTeam?._id,
+      fileName: fileName ?? null,
+      teamId: activeTeam?._id ?? null,
       createdBy: user?.email ?? null,
       archive: false,
       document: "",
