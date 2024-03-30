@@ -32,7 +32,6 @@ function Workspace({ params }: any) {
         {/* Document */}
         <div className="h-screen">
           <Editor
-            className="p-5"
             onSaveTrigger={triggerSave}
             fileId={params.field}
             fileData={fileData}
