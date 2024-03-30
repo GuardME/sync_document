@@ -54,8 +54,9 @@ function Editor({
   const updateDocument = useMutation(api.files.updateDocument);
   const [document, setDocument] = useState(rawDocument);
   useEffect(() => {
-    initEditor();
-  },[]);
+    console.log('file Data', fileData)
+    fileData&&initEditor();
+  },[fileData]);
   useEffect(() => {
     console.log("triiger Value:", onSaveTrigger);
     onSaveTrigger && onSaveDocument();
@@ -95,7 +96,7 @@ function Editor({
         warning: Warning,
       },
       holder: "editorjs",
-      data: fileData?.document ? JSON.parse(fileData.document) : rawDocument,
+      data:fileData?.document?JSON.parse(fileData.document):rawDocument
     });
     ref.current = editor;
   };

@@ -35,6 +35,7 @@ function Workspace({ params }: any) {
             className="p-5"
             onSaveTrigger={triggerSave}
             fileId={params.field}
+            fileData={fileData}
           />
         </div>
         {/* Whiteboard Canvas */}
